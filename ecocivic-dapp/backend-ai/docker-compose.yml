@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: ecocivic
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ecocivic
+    ports:
+      - "5432:5432"
+
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - DEBUG=true
+      - API_PORT=8000
+      - DATABASE_URL=postgresql://ecocivic:password@db:5432/ecocivic
+    depends_on:
+      - db
