@@ -165,9 +165,8 @@ export default function AdminPortal() {
               {decisionStatus.decision === "APPROVE" ? (
                 <>
                   <strong>Dürüst Beyan Onaylandı (APPROVED)!</strong> Vatandaş (
-                  <code>{decisionStatus.offender.slice(0, 10)}...</code>) İtibar Skoru +5 artırıldı
-                  (Yeni $R_i$: {decisionStatus.result.new_reputation_score}) ve EIP-712 Voucher
-                  imzalandı.
+                  <code>{decisionStatus.offender.slice(0, 10)}...</code>) Güven Puanı +5 artırıldı
+                  (Yeni Puan: {decisionStatus.result.new_reputation_score}) ve onay imzalandı.
                 </>
               ) : (
                 <>
@@ -178,12 +177,12 @@ export default function AdminPortal() {
                   Denetçi Ödülü (%20):{" "}
                   <strong>{decisionStatus.result.inspector_reward_usdc} USDC</strong> | Belediye
                   Çevre Fonu (%80):{" "}
-                  <strong>{decisionStatus.result.treasury_share_usdc} USDC</strong> | İtibar ($R_i$):{" "}
+                  <strong>{decisionStatus.result.treasury_share_usdc} USDC</strong> | Güven Puanı:{" "}
                   <strong>
                     {decisionStatus.result.reputation_before} →{" "}
                     {decisionStatus.result.reputation_after}
                   </strong>{" "}
-                  (Yeni Min. Teminat Şartı: {decisionStatus.result.new_required_stake_usdc} USDC) |
+                  (Yeni Güvence Bedeli Şartı: {decisionStatus.result.new_required_stake_usdc} USDC) |
                   Tx: <code>{decisionStatus.txHash?.slice(0, 18)}...</code>
                 </>
               )}
@@ -203,7 +202,7 @@ export default function AdminPortal() {
                   <TableCell>ID / Sayaç</TableCell>
                   <TableCell>Vatandaş Cüzdanı</TableCell>
                   <TableCell>Endeks / Δ</TableCell>
-                  <TableCell>İtibar ($R_i$)</TableCell>
+                  <TableCell>Güven Puanı (Rᵢ)</TableCell>
                   <TableCell>Anomali / Spoof</TableCell>
                   <TableCell>Teftiş Nedeni</TableCell>
                   <TableCell>Durum</TableCell>
@@ -301,15 +300,15 @@ export default function AdminPortal() {
                 </Typography>
               </Stack>
               <Typography variant="body2" color="text.secondary">
-                Q1/Q2 Makale Modeli: Farklı İtibar Skorları ($R_i$) ve Anomali Katsayıları altında
-                Nash Dengesi Denetim Olasılığı ($p^*$), Dürüst Beklenen Fayda ($E[U_h]$) ve Hile
-                Beklenen Faydası ($E[U_c]$) Matrisi.
+                Q1/Q2 Makale Modeli: Farklı Güven Puanları (Rᵢ) ve Anomali Katsayıları altında
+                Nash Dengesi Denetim Olasılığı (p*), Dürüst Beklenen Fayda E[Uₕ] ve Hile
+                Beklenen Faydası E[U꜀] Matrisi.
               </Typography>
             </Box>
 
             <Paper sx={{ p: 2, minWidth: 280 }} variant="outlined">
               <Typography variant="caption" fontWeight="bold" display="block">
-                Varsayılan Hile Kazancı ($G_{fraud}$): {fraudGain} Birim
+                Varsayılan Hile Kazancı (G): {fraudGain} Birim
               </Typography>
               <Slider
                 value={fraudGain}
@@ -365,8 +364,8 @@ export default function AdminPortal() {
               <Table size="small">
                 <TableHead>
                   <TableRow>
-                    <TableCell>İtibar ($R_i$)</TableCell>
-                    <TableCell>Gerekli Teminat ($S_{req}$)</TableCell>
+                    <TableCell>Güven Puanı (Rᵢ)</TableCell>
+                    <TableCell>Gerekli Güvence (S_req)</TableCell>
                     <TableCell>Ödül Çarpanı</TableCell>
                     <TableCell>Anomali = 0.00 (Dürüst)</TableCell>
                     <TableCell>Anomali = 0.25 (Düşük)</TableCell>

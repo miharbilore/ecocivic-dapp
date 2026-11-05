@@ -421,7 +421,7 @@ export default function RecyclingQR() {
                           Ödül: <strong>+{kioskResult.reward_amount} BELT</strong>
                         </Typography>
                         <Typography variant="caption" color="text.secondary" display="block">
-                          Yeni İtibar ($R_i$): {kioskResult.reputation_score} Puan
+                          Yeni Güven Puanı: {kioskResult.reputation_score} Puan
                         </Typography>
                         <Typography
                           variant="caption"
@@ -455,7 +455,7 @@ export default function RecyclingQR() {
                   <Alert severity="success" sx={{ mt: 2 }}>
                     <strong>RecyclingRewards.rewardRecycling On-Chain Tamamlandı!</strong> Tx:{" "}
                     <code>{txReceipt.hash}</code> | <strong>+{kioskResult.reward_amount} BELT</strong>{" "}
-                    ve <strong>+5 İtibar Puanı ($R_i$)</strong> cüzdanınıza eklendi.
+                    ve <strong>+5 Güven Puanı</strong> cüzdanınıza eklendi.
                   </Alert>
                 )}
               </Box>

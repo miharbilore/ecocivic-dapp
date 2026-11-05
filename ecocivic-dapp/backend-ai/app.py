@@ -852,6 +852,74 @@ def get_citizen_virtual_card(wallet_address: str):
         return jsonify(_build_virtual_card_info(db, citizen)), 200
 
 
+# Demo personaları için deterministik başlangıç profilleri (Jüri / B2G sunumları)
+DEMO_PERSONA_SEEDS = {
+    "citizen": {
+        "reputation_score": 250,
+        "honest_declarations_count": 30,
+        "slashing_count": 0,
+        "deposit_amount_usdc": 1500.0,
+        "card_balance_try": 225.0,
+        "under_investigation": False,
+    },
+    "riskyCitizen": {
+        "reputation_score": 45,
+        "honest_declarations_count": 2,
+        "slashing_count": 2,
+        "deposit_amount_usdc": 700.0,
+        "card_balance_try": 40.0,
+        "under_investigation": True,
+    },
+    "inspector": {
+        "reputation_score": 500,
+        "honest_declarations_count": 0,
+        "slashing_count": 0,
+        "deposit_amount_usdc": 0.0,
+        "card_balance_try": 0.0,
+        "under_investigation": False,
+    },
+}
+
+
+@app.route("/api/demo/reset", methods=["POST"])
+def reset_demo_persona():
+    """
+    Demo Verilerini Sıfırla: Seçili demo cüzdanının tüm beyan, ceza ve sanal kart
+    geçmişini temizler ve profili deterministik başlangıç değerlerine döndürür.
+    """
+    body = request.get_json(silent=True) or {}
+    wallet_address = _normalize_wallet(body.get("wallet_address"))
+    persona = str(body.get("persona", "citizen"))
+    seed = DEMO_PERSONA_SEEDS.get(persona, DEMO_PERSONA_SEEDS["citizen"])
+
+    with get_db() as db:
+        for model in (WaterMeterReading, RecyclingSubmission, PenaltyRecord, VirtualCardTransaction):
+            db.query(model).filter(model.wallet_address == wallet_address).delete(
+                synchronize_session=False
+            )
+
+        citizen = _get_or_create_citizen(db, wallet_address)
+        citizen.reputation_score = seed["reputation_score"]
+        citizen.honest_declarations_count = seed["honest_declarations_count"]
+        citizen.slashing_count = seed["slashing_count"]
+        citizen.deposit_amount_usdc = seed["deposit_amount_usdc"]
+        citizen.card_balance_try = seed["card_balance_try"]
+        citizen.total_burned_belt = 0.0
+        citizen.under_investigation = seed["under_investigation"]
+        citizen.eip712_nonce = 0
+        db.flush()
+
+        return jsonify(
+            {
+                "status": "RESET",
+                "persona": persona,
+                "wallet_address": citizen.wallet_address,
+                "reputation_score": citizen.reputation_score,
+                "card_balance_try": citizen.card_balance_try,
+            }
+        ), 200
+
+
 @app.route("/api/citizen/card/convert", methods=["POST"])
 def convert_belt_to_virtual_card():
     """

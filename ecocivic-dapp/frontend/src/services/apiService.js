@@ -577,4 +577,19 @@ export const spendVirtualCardBalance = async ({
   }
 };
 
+/**
+ * 10. Demo Verilerini Sıfırla (POST /api/demo/reset)
+ */
+export const resetDemoPersona = async (walletAddress, persona) => {
+  try {
+    const response = await apiClient.post("/api/demo/reset", {
+      wallet_address: walletAddress,
+      persona,
+    });
+    return response.data;
+  } catch {
+    return { status: "RESET_LOCAL_ONLY", persona, wallet_address: walletAddress };
+  }
+};
+
 export default apiClient;

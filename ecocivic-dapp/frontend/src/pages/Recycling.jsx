@@ -11,9 +11,8 @@ export default function Recycling() {
           Sıfır Atık Beyanı & Raspberry Pi Kiosk Simülatörü
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          Geri dönüşüm QR kodunuzu oluşturun, Raspberry Pi Akıllı Kiosk üzerinde Load-Cell
-          (ağırlık sensörü) doğrulamasını tamamlayın, ESC/POS termal fişinizi alın ve EIP-712
-          imzasıyla BELT token ödülünüzü cüzdanınıza basın.
+          Geri dönüşüm QR kodunuzu oluşturun, Akıllı Kiosk üzerinde tartım doğrulamasını
+          tamamlayın, termal fişinizi alın ve çevre puanı ödülünüzü anında cüzdanınıza ekleyin.
         </Typography>
       </Box>
 

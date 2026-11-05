@@ -36,9 +36,8 @@ export default function Home() {
           color="text.secondary"
           sx={{ maxWidth: 820, mx: "auto", mb: 3 }}
         >
-          Sivil İtibar Skoru ($R_i$), 2D FFT Anti-Spoofing OCR, EIP-712 Kriptografik AI Oracle,
-          Aave DeFi Escrow Teminatı ve 2x2 Nash Dengesi Denetim Oyunu ile sıfır suistimalli
-          belediye ekosistemi.
+          Çevre & Güven Puanı, Yapay Zeka Destekli Sayaç Okuma, Ön Ödemeli Sanal Kart,
+          İade Edilebilir Güvence Bedeli ve Otonom Denetim ile sıfır suistimalli belediye ekosistemi.
         </Typography>
 
         <Stack direction={{ xs: "column", sm: "row" }} spacing={2} justifyContent="center">
@@ -73,8 +72,8 @@ export default function Home() {
               AI Su Sayacı & Tasarruf
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              2D FFT Anti-Spoofing, OpenCV CLAHE OCR ve $\Delta$ tüketim analiziyle su tasarruf
-              bonusunuzu EIP-712 imzasıyla kazanın.
+              Yapay zeka sahtecilik kontrolü, otomatik endeks okuma ve tüketim farkı (Δ)
+              analiziyle su tasarruf bonusunuzu anında kazanın.
             </Typography>
           </Paper>
         </Grid>
@@ -104,7 +103,7 @@ export default function Home() {
           >
             <AccountBalanceIcon sx={{ fontSize: 52, color: "#ab47bc", mb: 1.5 }} />
             <Typography variant="h6" fontWeight="bold" gutterBottom>
-              Sivil İtibar ($R_i$) & DeFi
+              Çevre & Güven Puanı
             </Typography>
             <Typography variant="body2" color="text.secondary">
               İtibar skorunuz yükseldikçe ödül çarpanınız artsın, yatırmanız gereken Aave USDC

@@ -323,14 +323,14 @@ export default function WaterMeterUpload() {
                 />
               </Stack>
               <Typography variant="body2">
-                • Nash Denetim Olasılığı ($p^*$):{" "}
+                • Rutin Kontrol Sıklığı:{" "}
                 <strong>
                   %{((analysisResult.game_theory?.nash_audit_probability || 0.2) * 100).toFixed(1)}
                 </strong>
               </Typography>
               <Typography variant="body2">
-                • Beklenen Fayda: $E[U_h]$ ={" "}
-                {analysisResult.game_theory?.expected_utility_honest ?? "27.5"} vs $E[U_c]$ ={" "}
+                • Beklenen Fayda (Dürüst / Hile):{" "}
+                {analysisResult.game_theory?.expected_utility_honest ?? "27.5"} /{" "}
                 {analysisResult.game_theory?.expected_utility_cheat ?? "-25.0"}
               </Typography>
             </Paper>
@@ -408,7 +408,7 @@ export default function WaterMeterUpload() {
                   <strong>On-Chain İşlem Onaylandı!</strong> Tx Hash:{" "}
                   <code>{txReceipt.hash}</code> | Blok: #{txReceipt.blockNumber} | Kazanılan:{" "}
                   <strong>+{analysisResult.reward_amount} BELT</strong> ve{" "}
-                  <strong>+5 Sivil İtibar Puanı ($R_i$)</strong>!
+                  <strong>+5 Güven Puanı</strong>!
                 </Alert>
               )}
             </Paper>

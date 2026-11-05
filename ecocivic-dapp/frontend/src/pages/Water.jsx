@@ -11,9 +11,8 @@ export default function Water() {
           Akıllı Su Yönetimi & AI Oracle Doğrulama
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          Su sayacınızın fotoğrafını yükleyin; 2D FFT Anti-Spoofing, OpenCV CLAHE OCR ve
-          Tüketim Deltası ($\Delta$) analizinden geçerek geçmiş ortalamanıza göre su tasarruf
-          bonusunuzu EIP-712 imzasıyla anında kazanın.
+          Su sayacınızın fotoğrafını yükleyin; yapay zeka doğrulaması ve aylık tüketim farkı (Δ)
+          analizinden geçerek geçmiş ortalamanıza göre su tasarruf bonusunuzu anında kazanın.
         </Typography>
       </Box>
 

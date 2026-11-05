@@ -1,198 +1,113 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useRef, useState } from "react";
 import {
   Box,
-  Button,
   Card,
   CardContent,
-  Chip,
-  Divider,
   Grid,
   Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
+  Tab,
+  Tabs,
   Typography,
 } from "@mui/material";
-import WaterDropIcon from "@mui/icons-material/WaterDrop";
-import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
-import RewardsDashboard from "../components/RewardsDashboard";
+import PointOfSaleOutlinedIcon from "@mui/icons-material/PointOfSaleOutlined";
+import ShieldOutlinedIcon from "@mui/icons-material/ShieldOutlined";
+import HistoryOutlinedIcon from "@mui/icons-material/HistoryOutlined";
+import VirtualCard from "../components/VirtualCard";
+import TrustScoreCard from "../components/TrustScoreCard";
+import ConvertPointsDialog from "../components/ConvertPointsDialog";
+import CardPaymentPanel from "../components/CardPaymentPanel";
 import DepositPanel from "../components/DepositPanel";
 import PenaltyStatus from "../components/PenaltyStatus";
-import { useWallet } from "../context/WalletContext";
+import { DEMO_ACCOUNTS, useWallet } from "../context/WalletContext";
 
 export default function Dashboard() {
-  const navigate = useNavigate();
-  const { citizenProfile } = useWallet();
+  const { activePersona } = useWallet();
+  const [activeTab, setActiveTab] = useState(0);
+  const [convertOpen, setConvertOpen] = useState(false);
+  const tabsRef = useRef(null);
 
-  const waterReadings = citizenProfile?.water_readings || [];
-  const recyclings = citizenProfile?.recycling_submissions || [];
+  const personaName = DEMO_ACCOUNTS[activePersona]?.shortLabel || "Vatandaş";
+
+  const handleFocusPayTab = () => {
+    setActiveTab(0);
+    tabsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   return (
-    <Box>
-      <Stack
-        direction={{ xs: "column", md: "row" }}
-        justifyContent="space-between"
-        alignItems={{ xs: "flex-start", md: "center" }}
-        mb={3}
-        spacing={2}
-      >
-        <Box>
-          <Typography variant="h4" fontWeight="bold">
-            Vatandaş Süper-Uygulama Paneli
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Sivil İtibar Skorunuzu ($R_i$), Aave DeFi Teminatınızı ve EIP-712 doğrulanmış çevre
-            ödüllerinizi tek ekrandan yönetin.
-          </Typography>
-        </Box>
-
-        <Stack direction="row" spacing={1.5}>
-          <Button
-            variant="contained"
-            color="secondary"
-            startIcon={<WaterDropIcon />}
-            onClick={() => navigate("/water")}
-          >
-            Su Sayacı Yükle (AI OCR)
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<QrCodeScannerIcon />}
-            onClick={() => navigate("/recycling")}
-          >
-            Atık Kiosku & QR
-          </Button>
-          <Button
-            variant="outlined"
-            color="warning"
-            startIcon={<AdminPanelSettingsIcon />}
-            onClick={() => navigate("/admin")}
-          >
-            Belediye & Oyun Teorisi Portalı
-          </Button>
-        </Stack>
+    <Box sx={{ maxWidth: 1160, mx: "auto" }}>
+      {/* Üst Karşılama Başlığı (Tekrarlayan dev yönlendirme butonları kaldırıldı) */}
+      <Stack spacing={0.5} mb={3}>
+        <Typography variant="h4" fontWeight={700} letterSpacing={-0.5}>
+          Merhaba, {personaName}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          EcoCivic sanal kartınızı, çevre ödüllerinizi ve güvence bedelinizi tek ekrandan yönetin.
+        </Typography>
       </Stack>
 
-      <Grid container spacing={3}>
-        {/* 1. Citizen Reputation & Game Theory Card */}
-        <Grid item xs={12}>
-          <RewardsDashboard />
-        </Grid>
-
-        {/* 2. DeFi / Aave Escrow Deposit Panel */}
-        <Grid item xs={12} md={7}>
-          <DepositPanel />
-        </Grid>
-
-        {/* 3. Autonomous Audit & Slashing Status */}
-        <Grid item xs={12} md={5}>
-          <PenaltyStatus />
-        </Grid>
-
-        {/* 4. Recent Verified Activity */}
-        <Grid item xs={12}>
-          <Card elevation={2}>
-            <CardContent>
-              <Typography variant="h6" fontWeight="bold" gutterBottom>
-                Son Doğrulanan Su & Geri Dönüşüm Beyanları
-              </Typography>
-              <Divider sx={{ mb: 2 }} />
-
-              <Grid container spacing={3}>
-                <Grid item xs={12} md={6}>
-                  <Typography variant="subtitle2" color="secondary.main" gutterBottom>
-                    Su Sayacı Okumaları (WaterBilling)
-                  </Typography>
-                  {waterReadings.length === 0 ? (
-                    <Typography variant="body2" color="text.secondary">
-                      Henüz su sayacı okuması bulunmuyor.
-                    </Typography>
-                  ) : (
-                    <Table size="small">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>Sayaç</TableCell>
-                          <TableCell>Endeks</TableCell>
-                          <TableCell>Tüketim / Tasarruf</TableCell>
-                          <TableCell>Ödül</TableCell>
-                          <TableCell>Durum</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {waterReadings.slice(0, 5).map((r) => (
-                          <TableRow key={r.id}>
-                            <TableCell>{r.meter_no}</TableCell>
-                            <TableCell>{r.reading_index} m³</TableCell>
-                            <TableCell>
-                              {r.consumption_m3} m³ (Tasarruf: {r.saved_m3} m³)
-                            </TableCell>
-                            <TableCell sx={{ fontWeight: "bold", color: "primary.main" }}>
-                              +{r.reward_amount} BELT
-                            </TableCell>
-                            <TableCell>
-                              <Chip
-                                label={r.audit_status}
-                                color={
-                                  r.audit_status === "AUTO_APPROVED" ||
-                                  r.audit_status === "APPROVED"
-                                    ? "success"
-                                    : "warning"
-                                }
-                                size="small"
-                              />
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  )}
-                </Grid>
-
-                <Grid item xs={12} md={6}>
-                  <Typography variant="subtitle2" color="primary.main" gutterBottom>
-                    Kiosk Geri Dönüşüm Beyanları (RecyclingRewards)
-                  </Typography>
-                  {recyclings.length === 0 ? (
-                    <Typography variant="body2" color="text.secondary">
-                      Henüz geri dönüşüm beyanı bulunmuyor.
-                    </Typography>
-                  ) : (
-                    <Table size="small">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>Kiosk</TableCell>
-                          <TableCell>Tür</TableCell>
-                          <TableCell>Ağırlık</TableCell>
-                          <TableCell>Ödül</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {recyclings.slice(0, 5).map((s) => (
-                          <TableRow key={s.id}>
-                            <TableCell>{s.kiosk_id}</TableCell>
-                            <TableCell sx={{ textTransform: "uppercase" }}>
-                              {s.material_type}
-                            </TableCell>
-                            <TableCell>{s.amount_kg} kg</TableCell>
-                            <TableCell sx={{ fontWeight: "bold", color: "primary.main" }}>
-                              +{s.reward_amount} BELT
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  )}
-                </Grid>
-              </Grid>
+      {/* Üst Bölüm: Yan Yana 2 Şık Kart (Sol: EcoCivic Sanal Kartım | Sağ: Çevre & Güven Puanım) */}
+      <Grid container spacing={3} alignItems="stretch" mb={4}>
+        <Grid item xs={12} md={6}>
+          <Card sx={{ height: "100%", borderRadius: 4 }}>
+            <CardContent sx={{ p: { xs: 2.5, sm: 3 }, height: "100%" }}>
+              <VirtualCard
+                onConvert={() => setConvertOpen(true)}
+                onPay={handleFocusPayTab}
+              />
             </CardContent>
           </Card>
         </Grid>
+
+        <Grid item xs={12} md={6}>
+          <Box sx={{ height: "100%", "& > .MuiCard-root": { borderRadius: 4 } }}>
+            <TrustScoreCard />
+          </Box>
+        </Grid>
       </Grid>
+
+      {/* Alt Bölüm: 3 Sekmeli Ferah Yapı (MUI Tabs) */}
+      <Card ref={tabsRef} sx={{ borderRadius: 4 }}>
+        <Box sx={{ borderBottom: "1px solid rgba(255,255,255,0.08)", px: { xs: 1.5, sm: 3 } }}>
+          <Tabs
+            value={activeTab}
+            onChange={(_, v) => setActiveTab(v)}
+            variant="scrollable"
+            scrollButtons="auto"
+            sx={{
+              "& .MuiTab-root": {
+                textTransform: "none",
+                fontWeight: 600,
+                fontSize: "0.95rem",
+                minHeight: 56,
+              },
+            }}
+          >
+            <Tab
+              icon={<PointOfSaleOutlinedIcon fontSize="small" />}
+              iconPosition="start"
+              label="Harcama & Fatura Ödeme (POS)"
+            />
+            <Tab
+              icon={<ShieldOutlinedIcon fontSize="small" />}
+              iconPosition="start"
+              label="Güvence Bedeli (Teminat & Getiri)"
+            />
+            <Tab
+              icon={<HistoryOutlinedIcon fontSize="small" />}
+              iconPosition="start"
+              label="İşlem & Denetim Geçmişim"
+            />
+          </Tabs>
+        </Box>
+
+        <CardContent sx={{ p: { xs: 2.5, sm: 3.5 } }}>
+          {activeTab === 0 && <CardPaymentPanel />}
+          {activeTab === 1 && <DepositPanel />}
+          {activeTab === 2 && <PenaltyStatus />}
+        </CardContent>
+      </Card>
+
+      <ConvertPointsDialog open={convertOpen} onClose={() => setConvertOpen(false)} />
     </Box>
   );
 }
